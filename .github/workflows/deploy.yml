@@ -3,9 +3,6 @@ name: "Kubernetes Canary Release with Rollback"
 on:
   workflow_dispatch: # Manually triggered for flexibility
 
-env:
-  KUBECONFIG: ${{ runner.temp }}/kubeconfig # Set a temporary KUBECONFIG path
-
 jobs:
   canary-deployment:
     runs-on: ubuntu-latest
@@ -14,11 +11,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > ./kubernetes-config
+
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
-
-      - name: Set up Kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" > $KUBECONFIG
 
       - name: Deploy Stable to Kubernetes
         run: |
@@ -37,11 +35,15 @@ jobs:
       url: https://6b4407.learnk8s.jamesisme.com # Your canary environment URL
     needs: canary-deployment
     steps:
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" > $KUBECONFIG
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > ./kubernetes-config
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
 
       - name: Set Canary to 10% Traffic
         run: |
@@ -53,11 +55,15 @@ jobs:
       name: canary-50
     needs: canary-10-percent
     steps:
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" > $KUBECONFIG
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > ./kubernetes-config
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
 
       - name: Set Canary to 50% Traffic
         run: |
@@ -69,11 +75,15 @@ jobs:
       name: canary-100
     needs: canary-50-percent
     steps:
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" > $KUBECONFIG
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > ./kubernetes-config
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
 
       - name: Set Canary to 100% Traffic
         run: |
@@ -86,12 +96,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+      
+      - name: Set up Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > ./kubernetes-config
+
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
-
-      - name: Set up Kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" > $KUBECONFIG
 
       - name: Complete Deployment by removing previous deployment
         run: |
