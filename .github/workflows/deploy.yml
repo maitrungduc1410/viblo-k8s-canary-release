@@ -17,6 +17,8 @@ jobs:
 
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
+      
+      - run: ls -la
 
       - name: Deploy Stable to Kubernetes
         run: |
