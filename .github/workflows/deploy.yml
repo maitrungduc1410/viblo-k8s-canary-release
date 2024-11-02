@@ -6,7 +6,6 @@ on:
 jobs:
   canary-deployment:
     runs-on: ubuntu-latest
-    environment: canary
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
