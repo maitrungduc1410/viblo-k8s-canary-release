@@ -22,13 +22,13 @@ jobs:
 
       - name: Deploy Stable to Kubernetes
         run: |
-          kubectl apply -f deployment.yml --kubeconfig=$KUBECONFIG
-          kubectl apply -f ingress.yml --kubeconfig=$KUBECONFIG
+          kubectl apply -f deployment.yml --kubeconfig=./kubernetes-config
+          kubectl apply -f ingress.yml --kubeconfig=./kubernetes-config
 
       - name: Deploy Canary to Kubernetes
         run: |
-          kubectl apply -f deployment-canary.yml --kubeconfig=$KUBECONFIG
-          kubectl apply -f ingress-canary.yml --kubeconfig=$KUBECONFIG
+          kubectl apply -f deployment-canary.yml --kubeconfig=./kubernetes-config
+          kubectl apply -f ingress-canary.yml --kubeconfig=./kubernetes-config
 
   canary-10-percent:
     runs-on: ubuntu-latest
@@ -49,7 +49,7 @@ jobs:
 
       - name: Set Canary to 10% Traffic
         run: |
-          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-weight="10" --overwrite --kubeconfig=$KUBECONFIG
+          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-weight="10" --overwrite --kubeconfig=./kubernetes-config
 
   canary-50-percent:
     runs-on: ubuntu-latest
@@ -69,7 +69,7 @@ jobs:
 
       - name: Set Canary to 50% Traffic
         run: |
-          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-weight="50" --overwrite --kubeconfig=$KUBECONFIG
+          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-weight="50" --overwrite --kubeconfig=./kubernetes-config
 
   canary-100-percent:
     runs-on: ubuntu-latest
@@ -89,7 +89,7 @@ jobs:
 
       - name: Set Canary to 100% Traffic
         run: |
-          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-weight="100" --overwrite --kubeconfig=$KUBECONFIG
+          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-weight="100" --overwrite --kubeconfig=./kubernetes-config
 
   finalize-deployment:
     runs-on: ubuntu-latest
@@ -108,7 +108,7 @@ jobs:
 
       - name: Complete Deployment by removing previous deployment
         run: |
-          kubectl delete -f deployment.yml --kubeconfig=$KUBECONFIG
-          kubectl delete -f ingress.yml --kubeconfig=$KUBECONFIG
-          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-
-          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-weight-
+          kubectl delete -f deployment.yml --kubeconfig=./kubernetes-config
+          kubectl delete -f ingress.yml --kubeconfig=./kubernetes-config
+          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary- --kubeconfig=./kubernetes-config
+          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary-weight- --kubeconfig=./kubernetes-config
