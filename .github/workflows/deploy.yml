@@ -19,8 +19,8 @@ jobs:
 
       - name: Clean up if needed
         run: |
-          kubectl delete -f deployment-canary.yml --kubeconfig=./kubernetes-config
-          kubectl delete -f ingress-canary.yml --kubeconfig=./kubernetes-config
+          kubectl delete -f deployment-canary.yml --kubeconfig=./kubernetes-config --ignore-not-found=true
+          kubectl delete -f ingress-canary.yml --kubeconfig=./kubernetes-config --ignore-not-found=true
 
       - name: Deploy Stable to Kubernetes
         run: |
