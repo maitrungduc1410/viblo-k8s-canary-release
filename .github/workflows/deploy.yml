@@ -129,8 +129,6 @@ jobs:
 
       - name: Rollback to Stable
         run: |
-          kubectl annotate ingress myapp-canary nginx.ingress.kubernetes.io/canary="true" --overwrite --kubeconfig=./kubernetes-config
-
           kubectl apply -f deployment.yml --kubeconfig=./kubernetes-config
           kubectl apply -f ingress.yml --kubeconfig=./kubernetes-config
 
