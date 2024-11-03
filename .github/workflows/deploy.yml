@@ -119,7 +119,6 @@ jobs:
     runs-on: ubuntu-latest
     if: failure() # Executes if any of the previous jobs fail
     needs: [canary-10-percent, canary-50-percent, canary-100-percent, finalize-deployment]
-    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
